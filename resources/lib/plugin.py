@@ -5,6 +5,8 @@ import logging
 import xbmcaddon
 from resources.lib import kodiutils
 from resources.lib import kodilogging
+from resources.lib import read
+from resources.lib import main
 from xbmcgui import ListItem
 from xbmcplugin import addDirectoryItem, endOfDirectory
 
@@ -17,17 +19,13 @@ plugin = routing.Plugin()
 
 @plugin.route('/')
 def index():
-    addDirectoryItem(plugin.handle, plugin.url_for(
-        show_category, "one"), ListItem("Category One"), True)
-    addDirectoryItem(plugin.handle, plugin.url_for(
-        show_category, "two"), ListItem("Category Two"), True)
-    endOfDirectory(plugin.handle)
-
-
-@plugin.route('/category/<category_id>')
-def show_category(category_id):
-    addDirectoryItem(
-        plugin.handle, "", ListItem("Hello category %s!" % category_id))
+    data = read.load_url('https://lkg-drehnow.de/wordpress/predigten/')
+    arr = main.listOfNewest(data)
+    for x in arr:
+        listItem = ListItem(path=x.link, label=x.film)
+        listItem.setInfo('audio',infoLabels={ 'plot': x.plot })
+        listItem.setProperty('IsPlayable', 'true')
+        addDirectoryItem(plugin.handle, x.link, listItem)
     endOfDirectory(plugin.handle)
 
 def run():
