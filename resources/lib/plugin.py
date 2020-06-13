@@ -27,8 +27,8 @@ def index():
     if len(arr1) == len(arr2) and len(arr2) == len(arr3):
       i = 0
       for x in arr1:
-          listItem = ListItem(path=arr3[i], label=arr1[i])
-          listItem.setInfo('audio',infoLabels={ 'plot': arr2[i], 'plotoutline': arr2[i] })
+          listItem = ListItem(path=arr3[i], label=arr1[i], label2=arr2[i])
+          listItem.setInfo('audio',infoLabels={ 'artist': arr2[i] })
           listItem.setProperty('IsPlayable', 'true')
           addDirectoryItem(plugin.handle, arr3[i], listItem)
           i = i+1
